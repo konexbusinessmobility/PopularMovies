@@ -1,0 +1,40 @@
+package com.konexbusinessmobility.popularmovies.Model;
+
+import com.google.gson.annotations.SerializedName;
+
+import java.util.List;
+
+public class MovieResponse {
+    @SerializedName("results")
+    private List<Movie> results;
+    @SerializedName("total_results")
+    private int totalResults;
+
+    public List<Movie> getResults() {
+        return results;
+    }
+
+    public void setResults(List<Movie> results) {
+        this.results = results;
+    }
+
+    public int getTotalResults() {
+        return totalResults;
+    }
+
+    public void setTotalResults(int totalResults) {
+        this.totalResults = totalResults;
+    }
+
+    /*public static class MovieResult {
+
+        private List<Movie> results;
+
+        public List<Movie> getResults () {
+
+            return results;
+
+        }
+
+    }*/
+}
