@@ -8,12 +8,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <android.support.v7.widget.AppBarLayout
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/app_bar_height"
-        android:theme="@style/AppTheme.AppBarOverlay"
-        android:id="@+id/app_bar">
-
         <android.support.design.widget.CollapsingToolbarLayout
             android:id="@+id/toolbar_layout"
             android:layout_width="match_parent"
@@ -27,7 +21,8 @@
                 android:fitsSystemWindows="true"
                 android:scaleType="centerCrop"
                 android:layout_height="match_parent"
-                android:layout_width="match_parent"/>
+                android:layout_width="match_parent"
+                android:contentDescription="TODO" />
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
@@ -38,8 +33,6 @@
 
 
         </android.support.design.widget.CollapsingToolbarLayout>
-
-    </android.support.v7.widget.AppBarLayout>
 
     <include layout="@layout/content_main_details"/>
 

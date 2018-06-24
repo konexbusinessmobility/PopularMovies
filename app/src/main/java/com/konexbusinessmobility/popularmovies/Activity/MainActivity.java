@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.nfc.Tag;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
@@ -41,6 +42,11 @@ import java.util.List;
 import static com.konexbusinessmobility.popularmovies.Rest.MovieClient.getRetrofit;
 
 
+
+//  Reference: http://www.chansek.com/RecyclerView-no-adapter-attached-skipping-layout/
+//  Reference: http://mateoj.com/2015/10/06/creating-movies-app-retrofit-picasso-android/
+
+
 public class MainActivity extends AppCompatActivity implements MovieAdapter.MovieAdapterOnClickListener {
     private RecyclerView mRecyclerView;
     private MovieAdapter mAdapter;
@@ -60,9 +66,14 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         setSupportActionBar(toolbar);
         showMessage = findViewById(R.id.show_message);
 
+        // Set RecyclerView and the GridLayout Manager 2 columns
         mRecyclerView = findViewById(R.id.contentMainRecyclerView);
         RecyclerView.LayoutManager layoutManager = new GridLayoutManager(this, 2);
         mRecyclerView.setLayoutManager(layoutManager);
+        mRecyclerView.setHasFixedSize(true);
+        mAdapter = new MovieAdapter(movies, MainActivity.this, mContext);
+        mRecyclerView.setAdapter(mAdapter);
+
 
 
             getPopularMovies();
@@ -93,10 +104,11 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
             call.enqueue(new Callback<MovieResponse>() {
 
                 @Override
-                public void onResponse(Call<MovieResponse> call, Response<MovieResponse> response) {
+                public void onResponse(@NonNull Call<MovieResponse> call, @NonNull Response<MovieResponse> response) {
 
                     int statusCode = response.code();
                     if (response.isSuccessful()) {
+                        assert response.body() != null;
                         movies = response.body().getResults();
                         Log.d(TAG, "Number of Movies Received: " + movies.size());
                         if (mAdapter == null) {
@@ -119,7 +131,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
                     }
 
                 @Override
-                public void onFailure(Call<MovieResponse> call, Throwable t) {
+                public void onFailure(@NonNull Call<MovieResponse> call, @NonNull Throwable t) {
 
                     Log.e(TAG, "HTTP Call Failed " + t.getMessage());
                     showErrorMessage("HTTP Call got failed " + t.getMessage());
@@ -154,16 +166,11 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         }
 
         @Override
-        public boolean onOptionsItemSelected (MenuItem item){
+        public boolean onOptionsItemSelected (MenuItem item) {
 
             int menuID = item.getItemId();
 
-            if (menuID == R.id.action_settings) {
-
-                return true;
-            }
-
-            return super.onOptionsItemSelected(item);
+            return menuID == R.id.action_settings || super.onOptionsItemSelected(item);
 
 
         }
