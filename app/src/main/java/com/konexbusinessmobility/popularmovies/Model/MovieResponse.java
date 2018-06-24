@@ -2,6 +2,7 @@ package com.konexbusinessmobility.popularmovies.Model;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MovieResponse {
@@ -9,6 +10,7 @@ public class MovieResponse {
     private List<Movie> results;
     @SerializedName("total_results")
     private int totalResults;
+
 
     public List<Movie> getResults() {
         return results;

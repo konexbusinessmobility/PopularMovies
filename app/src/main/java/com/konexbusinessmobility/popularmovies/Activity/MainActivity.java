@@ -87,11 +87,10 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
 
         } try {
 
-            movieAPI = getRetrofit(mContext).create(MovieAPI.class);
+            movieAPI = MovieClient.getRetrofit(mContext).create(MovieAPI.class);
 
-            Call<MovieResponse> call = movieAPI.getPopularMovies(NetworkUtils.API_KEY);
+            Call<MovieResponse> call = movieAPI.getMovies(NetworkUtils.API_KEY);
             call.enqueue(new Callback<MovieResponse>() {
-
 
                 @Override
                 public void onResponse(Call<MovieResponse> call, Response<MovieResponse> response) {

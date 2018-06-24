@@ -9,7 +9,7 @@ import static com.konexbusinessmobility.popularmovies.BuildConfig.MOVIE_API_KEY;
 public class NetworkUtils {
 
     public final static String API_KEY = MOVIE_API_KEY;
-    public final static String BASE_URL = "https://api.themoviedb.org/3/";
+    public final static String BASE_URL = "https://api.themoviedb.org/3/movie/popular?api_key=";
 
     public static boolean checkConnectivity(Context context) {
 
