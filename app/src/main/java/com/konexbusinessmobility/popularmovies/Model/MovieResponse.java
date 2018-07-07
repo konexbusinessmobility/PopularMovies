@@ -1,18 +1,21 @@
 package com.konexbusinessmobility.popularmovies.Model;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class MovieResponse {
+
     @SerializedName("results")
     private List<Movie> results;
     @SerializedName("total_results")
     private int totalResults;
 
+    public List<Movie> getResults(){
 
-    public List<Movie> getResults() {
         return results;
     }
 
@@ -28,15 +31,10 @@ public class MovieResponse {
         this.totalResults = totalResults;
     }
 
-    /*public static class MovieResult {
-
-        private List<Movie> results;
-
-        public List<Movie> getResults () {
-
-            return results;
-
-        }
-
+    /*public static MovieResponse parseJSON(String response) {
+        Gson gson = new GsonBuilder().create();
+        MovieResponse movieResponse = gson.fromJson(response, MovieResponse.class);
+        return movieResponse;
     }*/
+
 }

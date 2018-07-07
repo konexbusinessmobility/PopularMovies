@@ -2,6 +2,7 @@ package com.konexbusinessmobility.popularmovies.Adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -96,7 +97,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
 
             int clickedPosition = getAdapterPosition();
             Intent intent = new Intent(mContext, MovieDetailActivity.class);
-            intent.putExtra(MovieDetailActivity.EXTRA_MOVIE, movies.get(clickedPosition));
+            //intent.putExtra(MovieDetailActivity.EXTRA_MOVIE, movies.get(clickedPosition));
             mContext.startActivity(intent);
             movieAdapterOnClickListener.onItemClick(clickedPosition);
 

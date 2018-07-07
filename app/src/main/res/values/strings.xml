@@ -7,4 +7,7 @@
         "I Am Batman. \n\n"
 
     </string>
+
+    <string name="no_summary_found">No summary was found</string>
+
 </resources>

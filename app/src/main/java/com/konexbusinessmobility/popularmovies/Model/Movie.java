@@ -7,134 +7,137 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-public class Movie implements Parcelable {
+public class Movie{
 
     @SerializedName("title")
-    private String title;
+    private String mOriginalTitle;
     @SerializedName("poster_path")
-    private String posterPath;
+    private String mPosterPath;
     @SerializedName("overview")
-    private String overview;
-    private String description;
-    private String voteAverage;
+    private String movieOverview;
+    private String movieDescription;
     @SerializedName("popularity")
-    private Double popularity;
+    private Double moviePopularity;
     @SerializedName("backdrop_path")
-    private String backdropPath;
-    private String releaseDate;
+    private String movieBackdropPath;
 
     //  Movie object Constructor
-    public Movie() {}
+    public Movie(String originalTitle, String posterPath, String overview, String description, String backdropPath) {
 
+        mOriginalTitle = originalTitle;
+        mPosterPath = posterPath;
+        movieOverview = overview;
+        movieDescription = description;
+        movieBackdropPath = backdropPath;
+
+    }
     //Gets the Movie title
     public String getTitle() {
 
-        return title;
+        return mOriginalTitle;
 
     }
 
     // Sets the Movie title
-    public void setTitle(String title) {
+    public void setTitle(String originalTitle) {
 
-        this.title = title;
+        mOriginalTitle = originalTitle;
 
     }
 
     // Get the path to the poster image
     public String getPosterPath() {
 
-        return "http://image.tmdb.org/t/p/w780" + posterPath;
+        final String TMDB_POSTER_BASE_URL = "http://image.tmdb.org/t/p/w185";
+
+        return TMDB_POSTER_BASE_URL + mPosterPath;
 
     }
 
     // Set the path to the poster image
     public void setPosterPath(String poster) {
 
-        this.posterPath = poster;
+        mPosterPath = poster;
     }
 
     // Get the Overview
     public String getOverview() {
 
-        return overview;
+        return movieOverview;
 
     }
 
     // Set the overview
     public void setOverview(String overview) {
 
-        this.overview = overview;
+        movieOverview = overview;
 
     }
 
     // Get the description
     public String getDescription() {
 
-        return description;
+        return movieDescription;
 
     }
 
     // Set the description
     public void setDescription(String description) {
 
-        this.description = description;
+        movieDescription = description;
 
     }
 
     // Get the popularity of a movie
     public Double getPopularity() {
-        return popularity;
+        return moviePopularity;
     }
 
     // Set the popularity of a movie
     public void setPopularity(Double popularity) {
-        this.popularity = popularity;
+        moviePopularity = popularity;
     }
 
     // Get the backdrop image path
     public String getBackdropPath() {
 
-        return "http://image.tmdb.org/t/p/w500" + backdropPath;
+        return "http://image.tmdb.org/t/p/w185" + movieBackdropPath;
 
     }
 
     // Set the backdrop image path
     public void setBackdropPath(String backdrop) {
 
-        this.backdropPath = backdrop;
+        movieBackdropPath = backdrop;
 
     }
 
-    @Override
+    /*@Override
     public int describeContents() {
 
         return 0;
 
-    }
+    }*/
 
-    @Override
+    /*@Override
     public void writeToParcel(Parcel dest, int flags) {
 
-        dest.writeString(title);
-        dest.writeString(posterPath);
-        dest.writeString(overview);
-        dest.writeString(description);
-        dest.writeString(voteAverage);
-        dest.writeString(backdropPath);
-        dest.writeString(releaseDate);
+        dest.writeString(mOriginalTitle);
+        dest.writeString(mPosterPath);
+        dest.writeString(movieOverview);
+        dest.writeString(movieDescription);
+        dest.writeString(movieBackdropPath);
 
     }
 
-    protected Movie(Parcel source) {
+    protected Movie() {
 
-        title = source.readString();
-        posterPath = source.readString();
-        overview = source.readString();
-        description = source.readString();
-        voteAverage = source.readString();
-        popularity = source.readDouble();
-        backdropPath = source.readString();
-        releaseDate = source.readString();
+        mOriginalTitle = source.readString();
+        mPosterPath = source.readString();
+        movieOverview = source.readString();
+        movieDescription = source.readString();
+        moviePopularity = source.readDouble();
+        movieBackdropPath = source.readString();
 
     }
 
@@ -151,6 +154,6 @@ public class Movie implements Parcelable {
             return new Movie[size];
 
         }
-    };
+    };*/
 
 }
