@@ -97,7 +97,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
 
             int clickedPosition = getAdapterPosition();
             Intent intent = new Intent(mContext, MovieDetailActivity.class);
-            //intent.putExtra(MovieDetailActivity.EXTRA_MOVIE, movies.get(clickedPosition));
+            intent.putExtra(MovieDetailActivity.EXTRA_MOVIE, movies.get(clickedPosition));
             mContext.startActivity(intent);
             movieAdapterOnClickListener.onItemClick(clickedPosition);
 

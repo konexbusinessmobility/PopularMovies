@@ -7,7 +7,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-public class Movie{
+public class Movie implements Parcelable {
 
     @SerializedName("title")
     private String mOriginalTitle;
@@ -112,14 +112,14 @@ public class Movie{
 
     }
 
-    /*@Override
+    @Override
     public int describeContents() {
 
         return 0;
 
-    }*/
+    }
 
-    /*@Override
+    @Override
     public void writeToParcel(Parcel dest, int flags) {
 
         dest.writeString(mOriginalTitle);
@@ -130,7 +130,7 @@ public class Movie{
 
     }
 
-    protected Movie() {
+    protected Movie(Parcel source) {
 
         mOriginalTitle = source.readString();
         mPosterPath = source.readString();
@@ -154,6 +154,6 @@ public class Movie{
             return new Movie[size];
 
         }
-    };*/
+    };
 
 }
