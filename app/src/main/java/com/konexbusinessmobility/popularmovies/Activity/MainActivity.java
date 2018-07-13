@@ -1,59 +1,37 @@
 package com.konexbusinessmobility.popularmovies.Activity;
 
-import android.content.Context;
-import android.content.Intent;
-import android.nfc.Tag;
 import android.os.Bundle;
-import android.support.design.widget.TabLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.text.TextUtils;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.konexbusinessmobility.popularmovies.Model.Movie;
 import com.konexbusinessmobility.popularmovies.Adapter.MovieAdapter;
-import com.konexbusinessmobility.popularmovies.Model.MovieResponse;
 import com.konexbusinessmobility.popularmovies.NetworkUtils;
 import com.konexbusinessmobility.popularmovies.R;
 import com.konexbusinessmobility.popularmovies.Rest.MovieAPI;
-import com.konexbusinessmobility.popularmovies.Rest.MovieClient;
 
-import okhttp3.MediaType;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
-import static com.konexbusinessmobility.popularmovies.Rest.MovieClient.getRetrofit;
 
 //  Reference: http://www.chansek.com/RecyclerView-no-adapter-attached-skipping-layout/
 
-
-public class MainActivity extends AppCompatActivity implements MovieAdapter.MovieAdapterOnClickListener {
+public class MainActivity extends AppCompatActivity {
 
     private RecyclerView mRecyclerView;
     private MovieAdapter mAdapter;
     private List<Movie> movies;
-    private final Context mContext = MainActivity.this;
     private MovieAPI movieAPI;
-    private TextView showMessage;
 
-    private static final String TAG = MainActivity.class.getSimpleName();
-
+    //private MovieAPI movieAPI;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -61,119 +39,40 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolBar);
         setSupportActionBar(toolbar);
-        showMessage = findViewById(R.id.show_message);
-
         // Set RecyclerView and the GridLayout Manager 2 columns
         mRecyclerView = findViewById(R.id.contentMainRecyclerView);
         RecyclerView.LayoutManager layoutManager = new GridLayoutManager(this, 2);
         mRecyclerView.setLayoutManager(layoutManager);
         mRecyclerView.setHasFixedSize(true);
-        mAdapter = new MovieAdapter(movies, MainActivity.this, mContext);
-        mRecyclerView.setAdapter(mAdapter);
 
-        getPopularMovies();
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(NetworkUtils.BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
 
-        }
+        movieAPI = retrofit.create(MovieAPI.class);
 
+        movieAPI.getMovies(NetworkUtils.API_KEY).enqueue(new Callback<List<Movie>>() {
+            @Override
+            public void onResponse(Call<List<Movie>> call, Response<List<Movie>> response) {
 
-    @Override
-    public void onItemClick(int clickedPosition) {
-
-        Intent detailIntent = new Intent(this, MovieDetailActivity.class);
-        detailIntent.putExtra("position", clickedPosition);
-        startActivity(detailIntent);
-    }
-
-        private void getPopularMovies() {
-
-        if (TextUtils.isEmpty(NetworkUtils.API_KEY)) {
-
-            showErrorMessage("Obtain a API_KEY from Themoviedb.org");
-            return;
-
-        } try {
-
-            movieAPI = MovieClient.getRetrofit(mContext).create(MovieAPI.class);
-
-            Call<MovieResponse> call = movieAPI.getMovies(NetworkUtils.API_KEY);
-            call.enqueue(new Callback<MovieResponse>() {
-
-                @Override
-                public void onResponse(Call<MovieResponse> call, Response<MovieResponse> response) {
-
-                    int statusCode = response.code();
-                    if (response.isSuccessful()) {
-                        movies = response.body().getResults();
-                        Log.d(TAG, "Number of Movies Received: " + movies.size());
-                        if (mAdapter == null) {
-                            mAdapter = new MovieAdapter(movies, MainActivity.this, mContext);
-                            mRecyclerView.setAdapter(mAdapter);
-                            mRecyclerView.setHasFixedSize(true);
-
-                        } else {
-
-                            mAdapter.setMovies(movies);
-                            mAdapter.notifyDataSetChanged();
-                        }
-
-                    } else {
-
-                        showErrorMessage("Failed to load list of " + " Status Code=" + statusCode);
-
-                        }
-
-                    }
-
-                @Override
-                public void onFailure(Call<MovieResponse> call, Throwable t) {
-
-                    Log.e(TAG, "HTTP Call Failed " + t.getMessage());
-                    showErrorMessage("HTTP Call got failed " + t.getMessage());
-
-                }
-            });
-
-            } catch (Exception e) {
-
-            Log.e(TAG, "No Internet Connection " + e.getMessage());
-            showErrorMessage("No Internet Connection");
+                movies = response.body();
+                mAdapter = new MovieAdapter(movies);
+                mRecyclerView.setAdapter(mAdapter);
 
             }
 
-        }
+            @Override
+            public void onFailure(Call<List<Movie>> call, Throwable t) {
 
-        private void showErrorMessage(String msg) {
+                Toast.makeText(MainActivity.this, "Could not get Movies!", Toast.LENGTH_SHORT).show();
 
-        mRecyclerView.setVisibility(View.INVISIBLE);
-        showMessage.setText(msg);
-        showMessage.setVisibility(View.VISIBLE);
-
-        }
-
-
-        @Override
-        public boolean onCreateOptionsMenu (Menu menu){
-
-            getMenuInflater().inflate(R.menu.main_menu, menu);
-            return true;
-
-        }
-
-        @Override
-        public boolean onOptionsItemSelected (MenuItem item){
-
-            int menuID = item.getItemId();
-
-            if (menuID == R.id.action_settings) {
-
-                return true;
             }
+        });
 
-            return super.onOptionsItemSelected(item);
-
-
-        }
 
     }
+
+}
 
 

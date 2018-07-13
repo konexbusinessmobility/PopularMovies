@@ -1,3 +1,4 @@
+/*
 package com.konexbusinessmobility.popularmovies.Rest;
 
 import android.content.Context;
@@ -37,10 +38,10 @@ public class MovieClient {
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
 
-        }
+         }
 
         return retrofit;
 
     }
 
-}
+}*/

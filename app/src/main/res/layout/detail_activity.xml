@@ -4,25 +4,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:fitsSystemWindows="true"
-    tools:context="com.konexbusinessmobility.popularmovies.Activity.MainActivity"
+    tools:context="com.konexbusinessmobility.popularmovies.Activity.MovieDetailActivity"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-        <android.support.design.widget.CollapsingToolbarLayout
-            android:id="@+id/toolbar_layout"
+        <android.support.design.widget.AppBarLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed"
-            app:contentScrim="?attr/colorPrimary"
-            android:fitsSystemWindows="true">
-
-            <ImageView
-                android:id="@+id/backdrop"
-                android:fitsSystemWindows="true"
-                android:scaleType="centerCrop"
-                android:layout_height="match_parent"
-                android:layout_width="match_parent"
-                android:contentDescription="TODO" />
+            android:layout_height="wrap_content"
+            android:theme="@style/AppTheme.AppBarOverlay">
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
@@ -32,7 +21,7 @@
                 app:popupTheme="@style/AppTheme.PopupOverlay"/>
 
 
-        </android.support.design.widget.CollapsingToolbarLayout>
+        </android.support.design.widget.AppBarLayout>
 
     <include layout="@layout/content_main_details"/>
 

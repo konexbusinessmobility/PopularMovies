@@ -3,112 +3,24 @@ package com.konexbusinessmobility.popularmovies.Model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.google.gson.annotations.SerializedName;
-
 import java.util.List;
 
 public class Movie implements Parcelable {
 
-    @SerializedName("title")
-    private String mOriginalTitle;
-    @SerializedName("poster_path")
-    private String mPosterPath;
-    @SerializedName("overview")
-    private String movieOverview;
-    private String movieDescription;
-    @SerializedName("popularity")
-    private Double moviePopularity;
-    @SerializedName("backdrop_path")
-    private String movieBackdropPath;
+    public String title;
+    public String posterPath;
+    public String description;
+    private String backdropPath;
+    private Double popularMovie;
 
     //  Movie object Constructor
-    public Movie(String originalTitle, String posterPath, String overview, String description, String backdropPath) {
+    public Movie(String title, String posterPath, String description, String backdropPath, Double popularMovie) {
 
-        mOriginalTitle = originalTitle;
-        mPosterPath = posterPath;
-        movieOverview = overview;
-        movieDescription = description;
-        movieBackdropPath = backdropPath;
-
-    }
-    //Gets the Movie title
-    public String getTitle() {
-
-        return mOriginalTitle;
-
-    }
-
-    // Sets the Movie title
-    public void setTitle(String originalTitle) {
-
-        mOriginalTitle = originalTitle;
-
-    }
-
-    // Get the path to the poster image
-    public String getPosterPath() {
-
-        final String TMDB_POSTER_BASE_URL = "http://image.tmdb.org/t/p/w185";
-
-        return TMDB_POSTER_BASE_URL + mPosterPath;
-
-    }
-
-    // Set the path to the poster image
-    public void setPosterPath(String poster) {
-
-        mPosterPath = poster;
-    }
-
-    // Get the Overview
-    public String getOverview() {
-
-        return movieOverview;
-
-    }
-
-    // Set the overview
-    public void setOverview(String overview) {
-
-        movieOverview = overview;
-
-    }
-
-    // Get the description
-    public String getDescription() {
-
-        return movieDescription;
-
-    }
-
-    // Set the description
-    public void setDescription(String description) {
-
-        movieDescription = description;
-
-    }
-
-    // Get the popularity of a movie
-    public Double getPopularity() {
-        return moviePopularity;
-    }
-
-    // Set the popularity of a movie
-    public void setPopularity(Double popularity) {
-        moviePopularity = popularity;
-    }
-
-    // Get the backdrop image path
-    public String getBackdropPath() {
-
-        return "http://image.tmdb.org/t/p/w185" + movieBackdropPath;
-
-    }
-
-    // Set the backdrop image path
-    public void setBackdropPath(String backdrop) {
-
-        movieBackdropPath = backdrop;
+        this.title = title;
+        this.posterPath = posterPath;
+        this.description = description;
+        this.backdropPath = backdropPath;
+        this.popularMovie = popularMovie;
 
     }
 
@@ -122,22 +34,21 @@ public class Movie implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
 
-        dest.writeString(mOriginalTitle);
-        dest.writeString(mPosterPath);
-        dest.writeString(movieOverview);
-        dest.writeString(movieDescription);
-        dest.writeString(movieBackdropPath);
+        dest.writeString(this.title);
+        dest.writeString(this.posterPath);
+        dest.writeString(this.description);
+        dest.writeString(this.backdropPath);
+        dest.writeDouble(this.popularMovie);
 
     }
 
     protected Movie(Parcel source) {
 
-        mOriginalTitle = source.readString();
-        mPosterPath = source.readString();
-        movieOverview = source.readString();
-        movieDescription = source.readString();
-        moviePopularity = source.readDouble();
-        movieBackdropPath = source.readString();
+        this.title = source.readString();
+        this.posterPath = source.readString();
+        this.description = source.readString();
+        this.backdropPath = source.readString();
+        this.popularMovie = source.readDouble();
 
     }
 
