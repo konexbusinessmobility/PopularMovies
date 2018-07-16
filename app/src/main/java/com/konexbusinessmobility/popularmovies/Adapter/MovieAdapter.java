@@ -1,6 +1,7 @@
 package com.konexbusinessmobility.popularmovies.Adapter;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -30,7 +31,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
 
     @NonNull
     @Override
-    public MovieViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public MovieViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_movie, parent, false);
 
@@ -57,23 +58,23 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
     public class MovieViewHolder extends RecyclerView.ViewHolder {
 
         private ImageView poster;
-        private TextView title;
-        private TextView description;
+        private TextView mTitle;
+        private TextView mDescription;
 
 
         public MovieViewHolder(View view) {
 
             super(view);
             poster = view.findViewById(R.id.movie_poster);
-            title = view.findViewById(R.id.movie_title);
-            description = view.findViewById(R.id.movie_description);
+            mTitle = view.findViewById(R.id.movie_title);
+            mDescription = view.findViewById(R.id.movie_description);
 
         }
 
-        public void bind(Movie movie) {
+        public void bind(final Movie movie) {
 
-            title.setText(movie.title);
-            description.setText(movie.description);
+            mTitle.setText(movie.title);
+            mDescription.setText(movie.description);
             Picasso.get()
                     .load(movie.posterPath)
                     .into(poster);
@@ -83,9 +84,9 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
                 @Override
                 public void onClick(View v) {
 
-                    int clickedPosition = getAdapterPosition();
+                    //int clickedPosition = getAdapterPosition();
                     Intent intent = new Intent(itemView.getContext(), MovieDetailActivity.class);
-                    intent.putExtra(MovieDetailActivity.EXTRA_MOVIE, mMovies.get(clickedPosition));
+                    intent.putExtra("movie", movie);
                     itemView.getContext().startActivity(intent);
 
                 }

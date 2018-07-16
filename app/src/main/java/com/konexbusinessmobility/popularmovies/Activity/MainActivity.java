@@ -41,8 +41,8 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         // Set RecyclerView and the GridLayout Manager 2 columns
         mRecyclerView = findViewById(R.id.contentMainRecyclerView);
-        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(this, 2);
-        mRecyclerView.setLayoutManager(layoutManager);
+        //RecyclerView.LayoutManager layoutManager = new GridLayoutManager(this, 2);
+        mRecyclerView.setLayoutManager(new GridLayoutManager(this,2));
         mRecyclerView.setHasFixedSize(true);
 
         Retrofit retrofit = new Retrofit.Builder()
