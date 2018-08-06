@@ -4,7 +4,7 @@ package com.konexbusinessmobility.popularmovies.Rest;
 import android.content.Context;
 
 import com.konexbusinessmobility.popularmovies.Model.Movie;
-import com.konexbusinessmobility.popularmovies.NetworkUtils;
+import com.konexbusinessmobility.popularmovies.utilities.NetworkUtils;
 
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;

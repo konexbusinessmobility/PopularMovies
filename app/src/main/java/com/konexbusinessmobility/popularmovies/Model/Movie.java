@@ -3,68 +3,48 @@ package com.konexbusinessmobility.popularmovies.Model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.gson.annotations.SerializedName;
+
+import java.io.Serializable;
 import java.util.List;
 
-public class Movie implements Parcelable {
+public class Movie implements Serializable {
 
-    public String title;
-    public String posterPath;
-    public String description;
-    private String backdropPath;
-    private Double popularMovie;
+    public String mTitle;
+    private String mId;
+    public String mPosterPath;
+    public String mDescription;
+    private String mBackdropPath;
 
     //  Movie object Constructor
-    public Movie(String title, String posterPath, String description, String backdropPath, Double popularMovie) {
+    public Movie(String title, String id, String posterPath, String description, String backdropPath) {
 
-        this.title = title;
-        this.posterPath = posterPath;
-        this.description = description;
-        this.backdropPath = backdropPath;
-        this.popularMovie = popularMovie;
-
-    }
-
-    @Override
-    public int describeContents() {
-
-        return 0;
+        this.mTitle = title;
+        this.mId = id;
+        this.mPosterPath = posterPath;
+        this.mDescription = description;
+        this.mBackdropPath = backdropPath;
 
     }
 
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-
-        dest.writeString(this.title);
-        dest.writeString(this.posterPath);
-        dest.writeString(this.description);
-        dest.writeString(this.backdropPath);
-        dest.writeDouble(this.popularMovie);
-
+    public String getId() {
+        return mId;
     }
 
-    protected Movie(Parcel source) {
-
-        this.title = source.readString();
-        this.posterPath = source.readString();
-        this.description = source.readString();
-        this.backdropPath = source.readString();
-        this.popularMovie = source.readDouble();
-
+    public String getTitle() {
+        return mTitle;
     }
 
-    public static final Parcelable.Creator<Movie> CREATOR = new Parcelable.Creator<Movie>() {
+    public String getPosterPath() {
+        return mPosterPath;
+    }
 
-        @Override
-        public Movie createFromParcel(Parcel source) {
-            return new Movie(source);
-        }
+    public String getBackdropPath() {
+        return mBackdropPath;
+    }
 
-        @Override
-        public Movie[] newArray(int size) {
-
-            return new Movie[size];
-
-        }
-    };
+    public String getDescription() {
+        return mDescription;
+    }
 
 }
