@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -25,10 +26,16 @@ import java.util.List;
 
 public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHolder> {
 
-    private static final String TAG = MovieAdapter.class.getSimpleName();
-    private List<Movie> mMovies;
-    private Context mContext;
-    private final MovieAdapterOnClickHandler movieAdapterOnClickHandler;
+    private Movie[] mMovies;
+    private final Context mContext;
+
+    private final MovieAdapterOnClickListener mMovieAdapterOnClickListener;
+
+    public interface MovieAdapterOnClickListener{
+
+        void onItemClick(int clickedPosition);
+
+    }
 
     public interface MovieAdapterOnClickHandler{
 
@@ -36,40 +43,40 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
 
     }
 
-    public MovieAdapter(MovieAdapterOnClickHandler clickHandler) {
+    public MovieAdapter(List<Movie> movies, MovieAdapterOnClickListener listener, Context context) {
 
-
-        this.movieAdapterOnClickHandler = clickHandler;
+        this.mMovies = movies;
+        mMovieAdapterOnClickListener = listener;
+        this.mContext = context;
 
     }
 
     public class MovieViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private ImageView posterImage;
-        private TextView mTitle;
-        private TextView mDescription;
 
 
         public MovieViewHolder(View view) {
 
             super(view);
             posterImage = view.findViewById(R.id.movie_poster);
-            mTitle = view.findViewById(R.id.movie_title);
-            mDescription = view.findViewById(R.id.movie_description);
             view.setOnClickListener(this);
 
         }
 
-        @Override
-        public void onClick(View v) {
+        private final RecyclerView.OnClickListener moviePosterClickListener = new RecyclerView.OnClickListener() {
 
-            int adapterPosition = getAdapterPosition();
-            movieAdapterOnClickHandler.onClick(mMovies.get(adapterPosition));
+            @Override
+            public void onClick(AdapterView<?> parent, View v, int position) {
 
+                Movie movie = (Movie) parent.getItemAtPosition(position);
 
-        }
+                Intent intent = new Intent(getApplicatonContext(), MovieDetailActivity.class);
+                intent.putExtra(getResources().getString(R.string.parcel_movie), movie);
 
-    }
+                startActivity(intent);
+            }
+    };
 
         @NonNull
         @Override
@@ -116,4 +123,9 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
         notifyDataSetChanged();
 
     }
-}
+
+        @Override
+        public void onClick(View v) {
+
+        }
+    }

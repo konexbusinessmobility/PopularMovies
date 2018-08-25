@@ -1,3 +1,4 @@
+/*
 package com.konexbusinessmobility.popularmovies.Rest;
 
 
@@ -11,7 +12,7 @@ import retrofit2.http.Query;
 
 public interface MovieAPI {
 
-    @GET("movie/popular")
-    Call<List<Movie>> getMovies(@Query("api_key") String API_KEY);
+    void onFetchMoviesTaskCompleted(Movie[] movies);
 
 }
+*/

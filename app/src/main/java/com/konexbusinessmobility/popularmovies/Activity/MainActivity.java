@@ -1,15 +1,23 @@
 package com.konexbusinessmobility.popularmovies.Activity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
 import android.net.Network;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.Preference;
+import android.preference.PreferenceManager;
 import android.support.design.widget.NavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -17,10 +25,10 @@ import android.widget.Toast;
 
 import com.konexbusinessmobility.popularmovies.Model.Movie;
 import com.konexbusinessmobility.popularmovies.Adapter.MovieAdapter;
+import com.konexbusinessmobility.popularmovies.OnTaskCompleted;
 import com.konexbusinessmobility.popularmovies.utilities.MoviesJsonUtils;
 import com.konexbusinessmobility.popularmovies.utilities.NetworkUtils;
 import com.konexbusinessmobility.popularmovies.R;
-import com.konexbusinessmobility.popularmovies.Rest.MovieAPI;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -30,6 +38,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -42,6 +51,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     private RecyclerView mRecyclerView;
     private MovieAdapter mAdapter;
     private TextView mErrorMessageDisplay;
+    private Menu mMenu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,12 +62,13 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
 
         // Set RecyclerView and the GridLayout Manager 2 columns
         mRecyclerView = findViewById(R.id.contentMainRecyclerView);
+        mRecyclerView.setOnClickListener(moviePosterClickListener);
         mErrorMessageDisplay = findViewById(R.id.movie_error_message_display);
 
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 2, GridLayoutManager.VERTICAL, false);
         mRecyclerView.setLayoutManager(gridLayoutManager);
         mRecyclerView.setHasFixedSize(true);
-        mAdapter = new MovieAdapter(this);
+        mAdapter = new MovieAdapter(this, movies);
         mRecyclerView.setAdapter(mAdapter);
         loadMovieData("movie", "popular");
 
@@ -160,6 +171,114 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
             }
         });*/
 
+
+    }
+
+    private boolean isNetworkAvailable() {
+
+        ConnectivityManager connectivityManager = (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+
+        return networkInfo != null && networkInfo.isConnected();
+    }
+
+    private void getMoviesFromTMDB(String sortMethod) {
+
+        if (isNetworkAvailable()) {
+
+            String apiKey = getString(R.string.key_themoviedb);
+
+            OnTaskCompleted taskCompleted = new OnTaskCompleted() {
+
+                @Override
+                public void onFetchMoviesTaskCompleted(Movie[] movies) {
+                    mRecyclerView.setAdapter(new MovieAdapter(getApplicationContext(), Arrays.asList(movies)));
+                }
+            };
+
+            FetchMovieTask movieTask = new FetchMovieTask(taskCompleted, apiKey);
+            movieTask.execute(sortMethod);
+
+        } else {
+
+            Toast.makeText(this, getString(R.string.error_message), Toast.LENGTH_LONG).show();
+        }
+    }
+
+    public String getSortMethod() {
+
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences();
+
+        return preferences.getString(getString(R.string.pref_sort_method_key),
+                getString(R.string.tmdb_sort_pop_desc));
+
+    }
+
+    private void updateMenu() {
+
+        String sortMethod = getSortMethod();
+
+        if (sortMethod.equals(getString(R.string.tmdb_sort_pop_desc))) {
+
+            mMenu.findItem(R.string.pref_sort_pop_desc_key).setVisible(false);
+            mMenu.findItem(R.string.pref_sort_vote_avg_desc_key).setVisible(true);
+
+        } else {
+
+            mMenu.findItem(R.string.pref_sort_vote_avg_desc_key).setVisible(false);
+            mMenu.findItem(R.string.pref_sort_pop_desc_key).setVisible(true);
+        }
+    }
+
+    private void updateSharedPreferences(String sortMethod) {
+
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(getString(R.string.pref_sort_method_key), sortMethod);
+        editor.apply();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        getMenuInflater().inflate(R.menu.main_menu, mMenu);
+
+        mMenu = menu;
+
+        mMenu.add(Menu.NONE, R.string.pref_sort_pop_desc_key, Menu.NONE, null)
+                .setVisible(false)
+                .setIcon(R.drawable.ic_action_whatshot)
+                .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+
+        mMenu.add(Menu.NONE, R.string.pref_sort_vote_avg_desc_key, Menu.NONE, null)
+                .setVisible(false)
+                .setIcon(R.drawable.ic_action_poll)
+                .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+
+        updateMenu();
+
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+
+            case R.string.pref_sort_pop_desc_key:
+                updateSharedPreferences(getString(R.string.tmdb_sort_pop_desc));
+                updateMenu();
+                getMoviesFromTMDB(getSortMethod());
+                return true;
+
+            case R.string.pref_sort_vote_avg_desc_key:
+                updateSharedPreferences(getString(R.string.tmdb_sort_vote_avg_desc));
+                updateMenu();
+                getMoviesFromTMDB(getSortMethod());
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
 
     }
 

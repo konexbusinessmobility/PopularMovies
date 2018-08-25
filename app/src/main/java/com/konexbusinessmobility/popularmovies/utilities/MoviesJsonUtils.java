@@ -29,7 +29,7 @@ import java.util.List;
             final String MOVIE_ID = "id";
             final String TITLE = "title";
             final String POSTER = "poster_path";
-            final String DESCRIPTION = "description";
+            final String DESCRIPTION = "overview";
             final String BACKDROP = "backdrop_path";
 
             // Create an empty ArrayList to add movies to.
